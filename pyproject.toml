@@ -25,6 +25,8 @@ classifiers = [
 requires-python = ">=3.11"
 dependencies = [
     "arches>=8.0.0,<8.1.0",
+    "synthetic_data @ git+https://github.com/archesproject/arches-synthetic-data.git@main",
+    "rule_based_perms @ git+https://github.com/archesproject/arches-rule-based-permissions-poc.git@main"
 ]
 version = "0.0.1"
 

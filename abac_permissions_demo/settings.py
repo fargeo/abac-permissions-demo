@@ -439,3 +439,12 @@ except ImportError as e:
         from settings_local import *
     except ImportError as e:
         pass
+
+if DOCKER:
+    try:
+        from .settings_docker import *
+    except ImportError:
+        try:
+            from settings_docker import *
+        except ImportError as e:
+            pass

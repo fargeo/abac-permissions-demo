@@ -1,0 +1,57 @@
+version: "3.8"
+services:
+    abac-permissions-demo:
+        container_name: abac-permissions-demo
+        image: fargeo/abac-permissions-demo
+        build:
+            args:
+                # These are not delivered from the env_file - they're from --build-arg arguments.
+                ARCHES_CORE_HOST_DIR: ../arches/
+            context: ..
+            dockerfile: abac-permissions-demo/Dockerfile
+        command: run_arches
+        volumes:
+            # To change these variables, modify/add the .env file prior to launch - NOT env_file.env
+            - ${ARCHES_CORE_HOST_DIR:-../arches/}:/web_root/arches
+            - ./:/web_root/abac-permissions-demo
+            - $HOME/.aws/:/root/.aws/
+        ports:
+            - ${HOST_PROJECT_PORT:-8035}:80
+            - ${HOST_PROJECT_DEBUG_PORT:-5695}:5678
+        stdin_open: true
+        env_file:
+            - ./docker/env_file.env
+        tty: true
+        labels:
+            - traefik.http.routers.my-container.rule=Host(`abac-permissions-demo.local`)
+            - traefik.frontend.passHostHeader=true
+
+    abac-permissions-demo-webpack:
+        container_name: abac-permissions-demo-webpack
+        image: fargeo/abac-permissions-demo-webpack
+        build:
+            context: ..
+            dockerfile: abac-permissions-demo/docker/webpack/Dockerfile
+        #command: run_webpack
+        volumes:
+            - ../arches/:/web_root/arches
+            - ./:/web_root/abac-permissions-demo
+            - $HOME/.ssh/:/root/.ssh/:ro
+        env_file:
+            - ./docker/webpack/env_file.env
+        # environment:
+        #   SSH_PASSPHRASE: ${SSH_PASSPHRASE:-password}
+        # secrets:
+        #   - ssh_passphrase
+        # ports:
+        #   - 8080:8080
+        stdin_open: true
+        tty: true
+
+# secrets:
+#   ssh_passphrase:
+#     environment: "SSH_PASSPHRASE"
+networks:
+    default:
+        external: true
+        name: arches7-0-dev

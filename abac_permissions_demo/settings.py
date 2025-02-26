@@ -138,13 +138,15 @@ INSTALLED_APPS = (
     "arches.app.models",
     "arches.management",
     "guardian",
-    "captcha",
+    "django_recaptcha",
     "revproxy",
     "corsheaders",
     "oauth2_provider",
     "django_celery_results",
     # "silk",
     "abac_permissions_demo",  # Ensure the project is listed before any other arches applications
+    "synthetic_data",
+    "rule_based_perms",
 )
 
 # Placing this last ensures any templates provided by Arches Applications
@@ -416,6 +418,8 @@ LANGUAGES = [
     #   ('en-gb', _('British English')),
     #   ('es', _('Spanish')),
 ]
+
+PERMISSION_FRAMEWORK = "arches_filtered_permissions.ArchesFilteredPermissionFramework"
 
 # override this to permenantly display/hide the language switcher
 SHOW_LANGUAGE_SWITCH = len(LANGUAGES) > 1
